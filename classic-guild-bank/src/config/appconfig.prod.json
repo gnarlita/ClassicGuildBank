@@ -6,14 +6,14 @@
     "client_id": "hmjgYD08W4nvMauZip0okmlof5C1bQWr1CfMCJ_pnccqtZobwBbDme4jSvyekSRh"
   },
   "wowhead": {
-    "en" : "classic.wowhead.com",
-    "cn" : "cn.classic.wowhead.com",
-    "de" : "de.classic.wowhead.com",
-    "es" : "es.classic.wowhead.com",
-    "fr" : "fr.classic.wowhead.com",
-    "it" : "it.classic.wowhead.com",
-    "ru" : "ru.classic.wowhead.com",
-    "ko" : "ko.classic.wowhead.com",
-    "pt" : "pt.classic.wowhead.com"
+    "en" : "tbc.wowhead.com",
+    "cn" : "cn.tbc.wowhead.com",
+    "de" : "de.tbc.wowhead.com",
+    "es" : "es.tbc.wowhead.com",
+    "fr" : "fr.tbc.wowhead.com",
+    "it" : "it.tbc.wowhead.com",
+    "ru" : "ru.tbc.wowhead.com",
+    "ko" : "ko.tbc.wowhead.com",
+    "pt" : "pt.tbc.wowhead.com"
   }
 }
