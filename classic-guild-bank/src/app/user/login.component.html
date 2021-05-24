@@ -61,11 +61,11 @@
 </div> -->
 
 <div class="splash-screen">
-    <img src="../../assets/darkportal.jpg" />
+    <img src="../../assets/splash.png" />
 </div>
 
 <clr-modal class="centered-modal" [clrModalOpen]="showLogin" [clrModalClosable]="false">
-    <h3 class="modal-title">Welcome to Classic Guild Bank</h3>
+    <h3 class="modal-title">Welcome Guild Bank</h3>
     <div class="modal-body">
         <h5 class="hint">Login below or create a new account</h5>
         <form clrForm [formGroup]="loginForm" class="centered-form">
@@ -108,10 +108,9 @@
         <div class="clr-col-lg-8 clr-offset-lg-2">
             <div style="display: flex; flex-direction: row; justify-content: space-around" >
                 <a class="signup" (click)="registerAccount()">Create new account</a>
-                <a class="signup" (click)="resetPassword()">Forgot Password?</a>
+                <!--<a class="signup" (click)="resetPassword()">Forgot Password?</a>-->
             </div>
         </div>
-        <div class="cgb-art-credits">Artwork by <a href="https://foranger.artstation.com/">Adam Torn</a></div>
     </div>    
 </clr-modal>
 
