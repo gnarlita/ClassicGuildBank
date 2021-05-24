@@ -22,14 +22,13 @@ export class ItemSubCategory {
     }
 }
 
-export function getCategorization(item: Item) : string[] {
- 
-    const category = ItemCategories.find( c => c.value === item.class);
+export function getCategorization(item: Item): string[] {
+    const category = ItemCategories.find(c => c.value === item.class);
     let sub = undefined;
-    if( category.subCategories )
-        sub = category.subCategories.find( s => s.value === item.subclass);
+    if (category && category.subCategories)
+      sub = category.subCategories.find(s => s.value === item.subclass);
 
-    return [category.name, sub ? sub.name : ''];
+    return [category ? category.name : '', sub ? sub.name : ''];
 }
 
 export const ItemCategories: ItemCategory[] = [
@@ -77,9 +76,17 @@ export const ItemCategories: ItemCategory[] = [
         new ItemSubCategory(19, 'Wand'),
         new ItemSubCategory(20, 'Fishing Pole'),
     ]),
-    // new ItemCategory(3, 'Gem', [
-
-    // ]),
+     new ItemCategory(3, 'Gem', [
+        new ItemSubCategory(0, 'Red'),
+        new ItemSubCategory(1, 'Blue'),
+        new ItemSubCategory(2, 'Yellow'),
+        new ItemSubCategory(3, 'Purple'),
+        new ItemSubCategory(4, 'Green'),
+        new ItemSubCategory(5, 'Orange'),
+        new ItemSubCategory(6, 'Meta'),
+       new ItemSubCategory(7, 'Simple'),
+       new ItemSubCategory(8, 'Prismatic'),
+     ]),
     new ItemCategory(4, 'Armor', [
         new ItemSubCategory(0, 'Misc'),
         new ItemSubCategory(1, 'Cloth'),
@@ -105,7 +112,7 @@ export const ItemCategories: ItemCategory[] = [
         new ItemSubCategory(1, 'Parts'),
         new ItemSubCategory(2, 'Explosives'),
         new ItemSubCategory(3, 'Devices'),
-        //new ItemSubCategory(4, 'Jewelcrafting'),
+        new ItemSubCategory(4, 'Jewelcrafting'),
         new ItemSubCategory(5, 'Cloth'),
         new ItemSubCategory(6, 'Leather'),
         new ItemSubCategory(7, 'Metal/Stone'),
@@ -127,6 +134,7 @@ export const ItemCategories: ItemCategory[] = [
         new ItemSubCategory(7, 'First Aid'),
         new ItemSubCategory(8, 'Enchanting'),
         new ItemSubCategory(9, 'Fishing'),
+        new ItemSubCategory(10, 'Jewelcrafting'),
     ]),
     new ItemCategory(10, 'Money'),
     new ItemCategory(11, 'Quiver', [
