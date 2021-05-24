@@ -2,7 +2,7 @@
   "profiles": {
     "WowheadItemSeeder": {
       "commandName": "Project",
-      "commandLineArgs": "--lang ru"
+      "commandLineArgs": "--full"
     }
   }
 }
