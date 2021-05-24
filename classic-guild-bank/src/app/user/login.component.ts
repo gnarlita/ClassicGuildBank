@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
           this.errorAction = err.error.errorAction;
         }
         else {
-          this.errorText = "Unable to login to Classic Guild Bank";
+          this.errorText = "Unable to log in";
         }
         this.loggingIn = false;
       },

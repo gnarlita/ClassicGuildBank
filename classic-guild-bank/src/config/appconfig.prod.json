@@ -1,19 +1,19 @@
-{ 
-  "api": "https://classicguildbank-apim.azure-api.net/api",
-  "client": "https://classicguildbank.com",
+{
+  "api": "https://welcome-supplies-api.azurewebsites.net/api",
+  "client": "http://welcome.supplies",
   "patreon": {
     "oauth_redirect": "https://classicguildbank.com/patreon/callback",
     "client_id": "hmjgYD08W4nvMauZip0okmlof5C1bQWr1CfMCJ_pnccqtZobwBbDme4jSvyekSRh"
   },
   "wowhead": {
-    "en" : "tbc.wowhead.com",
-    "cn" : "cn.tbc.wowhead.com",
-    "de" : "de.tbc.wowhead.com",
-    "es" : "es.tbc.wowhead.com",
-    "fr" : "fr.tbc.wowhead.com",
-    "it" : "it.tbc.wowhead.com",
-    "ru" : "ru.tbc.wowhead.com",
-    "ko" : "ko.tbc.wowhead.com",
-    "pt" : "pt.tbc.wowhead.com"
+    "en": "tbc.wowhead.com",
+    "cn": "cn.tbc.wowhead.com",
+    "de": "de.tbc.wowhead.com",
+    "es": "es.tbc.wowhead.com",
+    "fr": "fr.tbc.wowhead.com",
+    "it": "it.tbc.wowhead.com",
+    "ru": "ru.tbc.wowhead.com",
+    "ko": "ko.tbc.wowhead.com",
+    "pt": "pt.tbc.wowhead.com"
   }
 }
