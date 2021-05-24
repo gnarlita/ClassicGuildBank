@@ -76,10 +76,10 @@ namespace ClassicGuildBankApi.Controllers
                     return BadRequest(new { errorMessage = GetModelStateErrors() });
 
                 var user = await _userManager.FindByNameAsync(model.UserName);
-                var emailResult = await _userManager.IsEmailConfirmedAsync(user);
+                //var emailResult = await _userManager.IsEmailConfirmedAsync(user);
 
-                if (!emailResult)
-                    return BadRequest(new { errorMessage = "Email Not Confirmed", errorAction = "Resend Confirmation" });
+                //if (!emailResult)
+                //    return BadRequest(new { errorMessage = "Email Not Confirmed", errorAction = "Resend Confirmation" });
 
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
@@ -144,10 +144,10 @@ namespace ClassicGuildBankApi.Controllers
 
                 var addedUser = _userManager.FindByNameAsync(model.Username).Result;
 
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(addedUser);
-                var safeToken = HttpUtility.UrlEncode(token);
+                //var token = await _userManager.GenerateEmailConfirmationTokenAsync(addedUser);
+                //var safeToken = HttpUtility.UrlEncode(token);
 
-                _sendGridService.SendEmailConfirmationEmail(addedUser, safeToken);
+                //_sendGridService.SendEmailConfirmationEmail(addedUser, safeToken);
 
                 if(!String.IsNullOrEmpty(model.GuildToken))
                 {
@@ -181,14 +181,14 @@ namespace ClassicGuildBankApi.Controllers
                 return BadRequest(new { errorMessage = $"Unable to locate user {username} to confirm" });
             } 
 
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            if (!result.Succeeded)
-            {
-                vm.Success = false;
-                vm.Message = $"Failed to confirm email";
+            //var result = await _userManager.ConfirmEmailAsync(user, code);
+            //if (!result.Succeeded)
+            //{
+            //    vm.Success = false;
+            //    vm.Message = $"Failed to confirm email";
 
-                return BadRequest(new { errorMessage = "Failed to confirm email" });
-            }
+            //    return BadRequest(new { errorMessage = "Failed to confirm email" });
+            //}
 
             return Accepted();
         }
@@ -220,19 +220,18 @@ namespace ClassicGuildBankApi.Controllers
         [HttpPost("sendResetPasswordEmail")]
         public async Task<IActionResult> SendResetPasswordEmail([FromBody]SendResetPasswordEmailModel model)
         {
+            //if(!ModelState.IsValid)
+            //    return BadRequest(new { errorMessage = GetModelStateErrors() });
 
-            if(!ModelState.IsValid)
-                return BadRequest(new { errorMessage = GetModelStateErrors() });
+            //var user = await _userManager.FindByEmailAsync(model.Email);
+            //if (user == null)
+            //    return BadRequest(new { errorMessage = "An account with that email address does not exist" });
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-                return BadRequest(new { errorMessage = "An account with that email address does not exist" });
+            //if (!user.UserName.Equals(model.Username, StringComparison.InvariantCultureIgnoreCase))
+            //    return BadRequest(new { errorMessage = "An account with that username and email combination does not exist" });
 
-            if (!user.UserName.Equals(model.Username, StringComparison.InvariantCultureIgnoreCase))
-                return BadRequest(new { errorMessage = "An account with that username and email combination does not exist" });
-
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            _sendGridService.SendPasswordResetEmail(user, HttpUtility.UrlEncode(token));
+            //var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            //_sendGridService.SendPasswordResetEmail(user, HttpUtility.UrlEncode(token));
 
             return Ok();
         }
@@ -245,14 +244,14 @@ namespace ClassicGuildBankApi.Controllers
             //if (!ModelState.IsValid)
             //    return BadRequest(GetModelStateErrors());
 
-            var user = await _userManager.FindByNameAsync(model.UserName);
-            if (user == null)
-                return BadRequest(new { errorMessage = "Failed to locate user" });
+            //var user = await _userManager.FindByNameAsync(model.UserName);
+            //if (user == null)
+            //    return BadRequest(new { errorMessage = "Failed to locate user" });
 
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var safeToken = HttpUtility.UrlEncode(token);
+            //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            //var safeToken = HttpUtility.UrlEncode(token);
 
-            _sendGridService.SendEmailConfirmationEmail(user, safeToken);
+            //_sendGridService.SendEmailConfirmationEmail(user, safeToken);
 
             return Ok();
         }
