@@ -87,9 +87,9 @@ namespace WowheadItemSeeder {
         }
 
         private static async Task<bool> DoItemImport(ClassicGuildBankDbContext bankDb, XmlSerializer deserializer, int itemId) {
-            var content = httpClient.GetAsync($"https://tbc.wowhead.com/item={itemId}?xml").Result.Content;
-            var xmlStream = content.ReadAsStreamAsync().Result;
-            var str = content.ReadAsStringAsync().Result;
+            var response = await httpClient.GetAsync($"https://wowhead.com/classic/item={itemId}?xml");
+            var content = response.Content;
+            var xmlStream = await content.ReadAsStreamAsync();
 
             var wItem = (Wowhead)deserializer.Deserialize(xmlStream);
 
@@ -127,7 +127,7 @@ namespace WowheadItemSeeder {
 
             for ( int i = 0; i < batchCnt; i++ ) {
                 foreach ( var item in bankDb.Items.Skip(i * 1000).Take(1000).ToList() ) {
-                    var result = await httpClient.GetAsync($"https://tbc.wowhead.com/item={item.Id}?xml");
+                    var result = await httpClient.GetAsync($"https://wowhead.com/classic/item={item.Id}?xml");
                     var xmlStream = await result.Content.ReadAsStreamAsync();
                     var str = await result.Content.ReadAsStringAsync();
 
@@ -163,7 +163,7 @@ namespace WowheadItemSeeder {
                 foreach ( var item in bankDb.Items.Where(item => item.Id >= minId).Skip(i * 1000).Take(1000).ToList() ) {
                     bankDb.Items.Attach(item);
                     foreach ( var lan in languages ) {
-                        var result = await httpClient.GetAsync($"https://{lan}.tbc.wowhead.com/item={item.Id}?xml");
+                        var result = await httpClient.GetAsync($"https://{lan}.wowhead.com/classic/item={item.Id}?xml");
                         var byteArray = await result.Content.ReadAsByteArrayAsync();
                         var str = Encoding.UTF8.GetString(byteArray, 0, byteArray.Length);
                         var reader = new StringReader(str);
@@ -188,30 +188,30 @@ namespace WowheadItemSeeder {
                         Console.WriteLine($"Updating Item {item.Id} - {item.Name} for Locale: {lan}");
 
                         switch ( lan ) {
-                            case "ru":
-                                item.RuName = localeName;
-                                break;
-                            case "de":
-                                item.DeName = localeName;
-                                break;
-                            case "fr":
-                                item.FrName = localeName;
-                                break;
-                            case "it":
-                                item.ItName = localeName;
-                                break;
-                            case "cn":
-                                item.CnName = localeName;
-                                break;
-                            case "es":
-                                item.EsName = localeName;
-                                break;
-                            case "ko":
-                                item.KoName = localeName;
-                                break;
-                            case "pt":
-                                item.PtName = localeName;
-                                break;
+                        case "ru":
+                            item.RuName = localeName;
+                            break;
+                        case "de":
+                            item.DeName = localeName;
+                            break;
+                        case "fr":
+                            item.FrName = localeName;
+                            break;
+                        case "it":
+                            item.ItName = localeName;
+                            break;
+                        case "cn":
+                            item.CnName = localeName;
+                            break;
+                        case "es":
+                            item.EsName = localeName;
+                            break;
+                        case "ko":
+                            item.KoName = localeName;
+                            break;
+                        case "pt":
+                            item.PtName = localeName;
+                            break;
                         }
                     }
                 }

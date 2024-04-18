@@ -1,0 +1,12 @@
+root = true
+
+[*.cs]
+#  CSharp formatting rules:
+csharp_new_line_before_open_brace = none
+csharp_indent_switch_labels = false
+csharp_indent_case_contents_when_block = false
+csharp_space_between_parentheses = control_flow_statements
+
+# CSharp diagnostic rules
+dotnet_diagnostic.IDE0047.severity = none
+dotnet_diagnostic.IDE0063.severity = none
