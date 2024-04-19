@@ -257,7 +257,7 @@ namespace ClassicGuildBankApi.Controllers
         public async Task<IActionResult> JoinGuild(Guid guildId)
         {
             var guild = _guildBankRepository.GetGuild(guildId);
-            var member = _guildBankRepository.AddGuildMember(guildId, ClassicGuildBankUser);
+            _ = _guildBankRepository.AddGuildMember(guildId, ClassicGuildBankUser);
 
             ClassicGuildBankUser.LastSelectedGuildId = guildId;
             await _userManager.UpdateAsync(ClassicGuildBankUser);

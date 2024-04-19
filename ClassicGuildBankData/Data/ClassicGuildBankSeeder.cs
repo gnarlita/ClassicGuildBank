@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ClassicGuildBankData.Data
@@ -95,7 +94,7 @@ namespace ClassicGuildBankData.Data
 
         }
 
-        private static string fg1Id = "72D8FD17-9D7B-47E3-882E-E81CD8FB91D0";
+        private static readonly string fg1Id = "72D8FD17-9D7B-47E3-882E-E81CD8FB91D0";
         public Guild GetFakeGuild1()
         {
             return new Guild
@@ -119,7 +118,7 @@ namespace ClassicGuildBankData.Data
             };
         }
 
-        private static string fc1Id = "1A6C7066-F013-4378-AA56-24C53F963288";
+        private static readonly string fc1Id = "1A6C7066-F013-4378-AA56-24C53F963288";
         public Character GetFakeCharacter1()
         {
             var bank = new Bag

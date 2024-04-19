@@ -173,7 +173,7 @@ namespace WowheadItemSeeder {
                             var wItem = (Wowhead)deserializer.Deserialize(reader);
                             localeName = wItem.Item.Name;
                         }
-                        catch ( Exception ex ) {
+                        catch {
                             var j = str.IndexOf("<name><![CDATA[") + 15;
                             var k = str.IndexOf("]]></name>", i);
                             if ( j > 0 && k > 0 )

@@ -5,14 +5,11 @@ using ClassicGuildBankApi.ViewModels.Auth;
 using ClassicGuildBankData.Models;
 using ClassicGuildBankData.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,7 +17,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace ClassicGuildBankApi.Controllers
 {
@@ -29,17 +25,17 @@ namespace ClassicGuildBankApi.Controllers
     {
         #region Data Members
 
-        private ILogger<AuthController> _logger;
+        private readonly ILogger<AuthController> _logger;
 
-        private SignInManager<ClassicGuildBankUser> _signInManager;
+        private readonly SignInManager<ClassicGuildBankUser> _signInManager;
 
-        private UserManager<ClassicGuildBankUser> _userManager;
+        private readonly UserManager<ClassicGuildBankUser> _userManager;
 
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
-        private SendGridService _sendGridService;
+        private readonly SendGridService _sendGridService;
 
-        private GuildBankRepository _guildBankRepository;
+        private readonly GuildBankRepository _guildBankRepository;
 
         #endregion
 
@@ -169,9 +165,10 @@ namespace ClassicGuildBankApi.Controllers
         public async Task<IActionResult> Confirm([FromQuery]string username, [FromQuery]string code)
         {
             var user = await _userManager.FindByNameAsync(username);
-            var vm = new ConfirmViewModel();
-            vm.Success = true;
-            vm.ClientUrl = _configuration.GetValue<string>("ClientUrl");
+            var vm = new ConfirmViewModel {
+                Success = true,
+                ClientUrl = _configuration.GetValue<string>("ClientUrl")
+            };
 
             if (user == null)
             {

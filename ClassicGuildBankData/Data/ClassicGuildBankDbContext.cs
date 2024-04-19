@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ClassicGuildBankData.Data
 {
@@ -34,6 +31,8 @@ namespace ClassicGuildBankData.Data
         #endregion
 
         #region Constructor
+        public ClassicGuildBankDbContext() {
+        }
 
         public ClassicGuildBankDbContext(IConfiguration config)
         {
@@ -46,8 +45,14 @@ namespace ClassicGuildBankData.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-                optionsBuilder.UseSqlServer(_configuration.GetConnectionString("ClassicGuildBankDb"));
+            if ( !optionsBuilder.IsConfigured ) {
+                if ( _configuration != null ) {
+                    optionsBuilder.UseSqlServer(_configuration.GetConnectionString("ClassicGuildBankDb"));
+                }
+                else {
+                    optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Initial Catalog=ClassicGuildBankDb;Integrated Security=True");
+                }
+            }
 
             optionsBuilder.EnableSensitiveDataLogging(true);
         }
