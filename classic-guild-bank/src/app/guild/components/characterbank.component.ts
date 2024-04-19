@@ -43,8 +43,6 @@ export class CharacterBankComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log(this.bankBags);
-        console.log(this.characterBags);
     }
 
     public deleteCharacter() {
@@ -64,4 +62,3 @@ export class CharacterBankComponent implements OnInit {
         });
     }
 }
-

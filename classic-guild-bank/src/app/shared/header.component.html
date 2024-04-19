@@ -2,14 +2,14 @@
     <div class="branding">
         <a href="javascript://" class="nav-link">
             <img src="../../assets/normal-transparent.png" width="50" height="50" />
-            <span class="title cgb-header-title" style="margin-left: .5rem">Welcome Guild Bank</span>
+            <span class="title cgb-header-title" style="margin-left: .5rem">NOTA Guild Bank</span>
         </a>
     </div>
     <!--<div class="header-nav cgb-header-nav">
         <a href="https://discord.gg/UrQS4qZ" target="_blank" class="nav-link nav-text">Contact</a>
-        
-        <a href="https://www.curseforge.com/wow/addons/classic-guild-bank/download" target="_blank" class="nav-link nav-text">Get Addon</a>--> 
-        
+
+        <a href="https://www.curseforge.com/wow/addons/classic-guild-bank/download" target="_blank" class="nav-link nav-text">Get Addon</a>-->
+
         <!-- <a href="https://github.com/ClassicGuildBank/ClassicGuildBank/archive/master.zip" target="_blank" class="nav-link nav-text">Get Addon</a> -->
         <!--<a href="https://github.com/ClassicGuildBank/ClassicGuildBank/issues" target="_blank" class="nav-link nav-text">Report Bug</a>
     </div>-->
@@ -31,9 +31,9 @@
                 </clr-dropdown-menu>
             </clr-dropdown>
 
-            <clr-dropdown *ngIf="activeUser">            
+            <clr-dropdown *ngIf="activeUser">
                 <button class="nav-text" clrDropdownTrigger>
-                    <span class="cgb-header-username">{{activeUser}}</span>             
+                    <span class="cgb-header-username">{{activeUser}}</span>
                     <clr-icon class="cgb-header-user-icon" shape="user"></clr-icon>
                     <clr-icon shape="caret down"></clr-icon>
                 </button>
@@ -44,12 +44,12 @@
             </clr-dropdown>
         </ng-container>
 
-        <clr-dropdown>            
+        <clr-dropdown>
             <button class="nav-text" clrDropdownTrigger>
-                <span class="cgb-header-username">{{activeLanguage}}</span>             
+                <span class="cgb-header-username">{{activeLanguage}}</span>
                 <clr-icon shape="caret down"></clr-icon>
             </button>
-            <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">  
+            <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
                 <a *ngFor="let wh of wowheadUrls" clrDropdownItem (click)="changeLanguage(wh.language)">{{wh.language}}</a>
             </clr-dropdown-menu>
         </clr-dropdown>

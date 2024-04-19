@@ -22,7 +22,7 @@
         <clr-password-container>
             <input type="password" name="password" clrPassword placeholder="Password" formControlName="password" />
         </clr-password-container>
-        
+
         <clr-alert *ngIf="errorText" [clrAlertClosable]="false" [clrAlertType]="'danger'">
             <clr-alert-item>
                 <span class="alert-text">{{errorText}}</span>
@@ -34,7 +34,7 @@
             </clr-alert-item>
         </clr-alert>
 
-        <clr-alert *ngIf="successText" 
+        <clr-alert *ngIf="successText"
             [clrAlertType]="'success'"
             [clrAlertClosable]="false">
             <clr-alert-item>
@@ -65,16 +65,16 @@
 </div>
 
 <clr-modal class="centered-modal" [clrModalOpen]="showLogin" [clrModalClosable]="false">
-    <h3 class="modal-title">Welcome Guild Bank</h3>
+    <h3 class="modal-title">NOTA Guild Bank</h3>
     <div class="modal-body">
         <h5 class="hint">Login below or create a new account</h5>
         <form clrForm [formGroup]="loginForm" class="centered-form">
-            
+
             <input type="text" name="username" clrInput placeholder="Username" formControlName="username" style="width: 236px" />
             <clr-password-container>
                 <input type="password" name="password" clrPassword placeholder="Password" formControlName="password" (keyup.enter)="onLogin()" />
-            </clr-password-container>            
-            
+            </clr-password-container>
+
             <clr-alert *ngIf="errorText" [clrAlertClosable]="false" [clrAlertType]="'danger'">
                 <clr-alert-item>
                     <span class="alert-text">{{errorText}}</span>
@@ -85,8 +85,8 @@
                     </div>
                 </clr-alert-item>
             </clr-alert>
-    
-            <clr-alert *ngIf="successText" 
+
+            <clr-alert *ngIf="successText"
                 [clrAlertType]="'success'"
                 [clrAlertClosable]="false">
                 <clr-alert-item>
@@ -111,8 +111,8 @@
                 <!--<a class="signup" (click)="resetPassword()">Forgot Password?</a>-->
             </div>
         </div>
-    </div>    
+    </div>
 </clr-modal>
 
 <cgb-register-user [showModal]="showRegisterModal" (closeRequested)="onRegisterClosed()"></cgb-register-user>
-<cgb-reset-password [showModal]="showResetPassword" (closeRequested)="onResetClosed()"></cgb-reset-password>  
+<cgb-reset-password [showModal]="showResetPassword" (closeRequested)="onResetClosed()"></cgb-reset-password>
