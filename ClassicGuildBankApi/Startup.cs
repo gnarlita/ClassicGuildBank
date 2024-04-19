@@ -78,15 +78,15 @@ namespace SSIndustrialApi
                     };
                 });
 
-            services.AddMvc(options =>
-            {
+            services.AddMvc(options => {
                 options.EnableEndpointRouting = false;
-                if (_hostingEnvironment.IsProduction())
+                if ( _hostingEnvironment.IsProduction() )
                     options.Filters.Add(new RequireHttpsAttribute());
-            }).AddJsonOptions(jsonOptions =>
-            {
+            }).AddJsonOptions(jsonOptions => {
                 jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            }).AddNewtonsoftJson(options => {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
 
             services.AddDbContext<ClassicGuildBankDbContext>( options => options.UseSqlServer(_configuration.GetConnectionString("ClassicGuildBankDb")));
 

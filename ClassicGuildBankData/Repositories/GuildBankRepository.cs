@@ -285,14 +285,19 @@ namespace ClassicGuildBankData.Repositories
                 .Include(guild => guild.GuildMembers)
                 .Where(guild => guild.UserId == classicGuildBankUser.Id || guild.GuildMembers.Any(member => member.UserId == classicGuildBankUser.Id));
 
+            var anySelected = false;
             foreach (var guild in guilds)
             {
                 guild.UserIsOwner = guild.UserId == classicGuildBankUser.Id;
                 guild.IsSelected = guild.IsSelected = classicGuildBankUser.LastSelectedGuildId == guild.Id;
                 guild.UserCanUpload = guild.UserIsOwner || guild.GuildMembers.Any(member => member.UserId == classicGuildBankUser.Id && member.CanUpload);
+
+                if ( guild.IsSelected ) {
+                    anySelected = true;
+                }
             }
 
-            if (guilds.Any() && !guilds.Any(guild => guild.IsSelected))
+            if (guilds.Any() && !anySelected)
                 guilds.First().IsSelected = true;
 
             return guilds;
