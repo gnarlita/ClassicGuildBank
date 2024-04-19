@@ -40,56 +40,105 @@ namespace WowheadItemSeeder {
             configBuilder.AddJsonFile("appsettings.json");
             var config = configBuilder.Build();
 
-            var bankDb = new ClassicGuildBankDbContext(config);
-
+            var bankDb1 = new ClassicGuildBankDbContext(config);
+            var bankDb2 = new ClassicGuildBankDbContext(config);
+            var bankDb3 = new ClassicGuildBankDbContext(config);
+            var bankDb4 = new ClassicGuildBankDbContext(config);
+            var bankDb5 = new ClassicGuildBankDbContext(config);
 
             if ( fullInitialize )
-                await DoFullInitialize(bankDb);
+                await DoFullInitialize(bankDb1, bankDb2, bankDb3, bankDb4, bankDb5);
             else if ( update )
-                await DoUpdate(bankDb);
+                await DoUpdate(bankDb1);
             else if ( itemLanguage )
-                await DoLanguageUpdate(bankDb);
+                await DoLanguageUpdate(bankDb1);
         }
 
-        public static async Task DoFullInitialize(ClassicGuildBankDbContext bankDb) {
-            var conn = bankDb.Database.GetDbConnection();
-            if ( conn.State != System.Data.ConnectionState.Open )
-                conn.Open();
-            bankDb.Database.ExecuteSqlCommand("SET IDENTITY_INSERT Item ON;");
-
+        public static async Task DoFullInitialize(ClassicGuildBankDbContext bankDb1, ClassicGuildBankDbContext bankDb2, ClassicGuildBankDbContext bankDb3, ClassicGuildBankDbContext bankDb4, ClassicGuildBankDbContext bankDb5) {
             var deserializer = new XmlSerializer(typeof(Wowhead));
 
             int itemCnt = 0;
-            int skipped = 0;
-            int maxId = bankDb.Items.Any() ? bankDb.Items.Where(i => i.Id < 100000).Max(i => i.Id) : 0;
+            int maxId = bankDb1.Items.Any() ? bankDb1.Items.Max(i => i.Id) : 0;
 
-            for ( var itemId = maxId; itemId < 35949; itemId++ ) {
-                if ( await DoItemImport(bankDb, deserializer, itemId) ) {
-                    if ( ++itemCnt % 1000 == 0 ) {
-                        Console.WriteLine($"Saved {bankDb.SaveChangesAsync().Result} Records");
-                    }
-                }
-                else {
-                    skipped++;
+            var conn1 = bankDb1.Database.GetDbConnection();
+            if ( conn1.State != System.Data.ConnectionState.Open)
+                conn1.Open();
+
+            var conn2 = bankDb2.Database.GetDbConnection();
+            if ( conn2.State != System.Data.ConnectionState.Open )
+                conn2.Open();
+
+            var conn3 = bankDb3.Database.GetDbConnection();
+            if ( conn3.State != System.Data.ConnectionState.Open )
+                conn3.Open();
+
+            var conn4 = bankDb4.Database.GetDbConnection();
+            if ( conn4.State != System.Data.ConnectionState.Open )
+                conn4.Open();
+
+            var conn5 = bankDb5.Database.GetDbConnection();
+            if ( conn5.State != System.Data.ConnectionState.Open )
+                conn5.Open();
+
+            await bankDb1.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT Item ON;");
+            await bankDb2.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT Item ON;");
+            await bankDb3.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT Item ON;");
+            await bankDb4.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT Item ON;");
+            await bankDb5.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT Item ON;");
+
+            if ( maxId < 25000 ) {
+                itemCnt += await DoImportItems(maxId, 24360, bankDb1, bankDb2, bankDb3, bankDb4, bankDb5, deserializer);
+                maxId = 24360;
+            }
+
+            if ( maxId < 225000 ) {
+                itemCnt += await DoImportItems(Math.Max(184937, maxId), 225000, bankDb1, bankDb2, bankDb3, bankDb4, bankDb5, deserializer);
+                maxId = 225000;
+            }
+
+            itemCnt += await bankDb1.SaveChangesAsync();
+            itemCnt += await bankDb2.SaveChangesAsync();
+            itemCnt += await bankDb3.SaveChangesAsync();
+            itemCnt += await bankDb4.SaveChangesAsync();
+            itemCnt += await bankDb5.SaveChangesAsync();
+
+            conn1.Close();
+            conn2.Close();
+            conn3.Close();
+            conn4.Close();
+            conn5.Close();
+
+            Console.WriteLine($"Imported {itemCnt} Records");
+            Console.ReadLine();
+        }
+
+        private static async Task<int> DoImportItems(int minId, int maxId, ClassicGuildBankDbContext bankDb1, ClassicGuildBankDbContext bankDb2, ClassicGuildBankDbContext bankDb3, ClassicGuildBankDbContext bankDb4, ClassicGuildBankDbContext bankDb5, XmlSerializer deserializer) {
+            var itemCnt = 0;
+
+            for ( var itemId = minId; itemId <= maxId; itemId += 5 ) {
+                Task.WaitAll(
+                    DoItemImport(bankDb1, deserializer, itemId),
+                    DoItemImport(bankDb2, deserializer, itemId + 1),
+                    DoItemImport(bankDb3, deserializer, itemId + 2),
+                    DoItemImport(bankDb4, deserializer, itemId + 3),
+                    DoItemImport(bankDb5, deserializer, itemId + 4)
+                );
+
+                if ( itemId % 100 == 0 ) {
+                    itemCnt += await bankDb1.SaveChangesAsync();
+                    itemCnt += await bankDb2.SaveChangesAsync();
+                    itemCnt += await bankDb3.SaveChangesAsync();
+                    itemCnt += await bankDb4.SaveChangesAsync();
+                    itemCnt += await bankDb5.SaveChangesAsync();
                 }
             }
 
-            // Chronoboon Displacer and Supercharged Chronoboon Displacer
-            await DoItemImport(bankDb, deserializer, 184937);
-            await DoItemImport(bankDb, deserializer, 184938);
-
-            var recordsSaved = await bankDb.SaveChangesAsync();
-            conn.Close();
-
-            Console.WriteLine(recordsSaved);
-            Console.WriteLine($"Skipped {skipped} Records");
-            Console.ReadLine();
+            return itemCnt;
         }
 
         private static async Task<bool> DoItemImport(ClassicGuildBankDbContext bankDb, XmlSerializer deserializer, int itemId) {
             var response = await httpClient.GetAsync($"https://wowhead.com/classic/item={itemId}?xml");
-            var content = response.Content;
-            var xmlStream = await content.ReadAsStreamAsync();
+            var xmlStream = await response.Content.ReadAsStreamAsync();
 
             var wItem = (Wowhead)deserializer.Deserialize(xmlStream);
 
