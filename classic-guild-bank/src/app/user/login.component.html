@@ -70,9 +70,11 @@
         <h5 class="hint">Login below or create a new account</h5>
         <form clrForm [formGroup]="loginForm" class="centered-form">
 
-            <input type="text" name="username" clrInput placeholder="Username" formControlName="username" style="width: 236px" />
+            <input type="text" name="username" clrInput placeholder="Username" formControlName="username"
+                style="width: 236px" />
             <clr-password-container>
-                <input type="password" name="password" clrPassword placeholder="Password" formControlName="password" (keyup.enter)="onLogin()" />
+                <input type="password" name="password" clrPassword placeholder="Password" formControlName="password"
+                    (keyup.enter)="onLogin()" />
             </clr-password-container>
 
             <clr-alert *ngIf="errorText" [clrAlertClosable]="false" [clrAlertType]="'danger'">
@@ -86,9 +88,7 @@
                 </clr-alert-item>
             </clr-alert>
 
-            <clr-alert *ngIf="successText"
-                [clrAlertType]="'success'"
-                [clrAlertClosable]="false">
+            <clr-alert *ngIf="successText" [clrAlertType]="'success'" [clrAlertClosable]="false">
                 <clr-alert-item>
                     <span class="alert-text">{{successText}}</span>
                 </clr-alert-item>
@@ -106,7 +106,7 @@
             </button>
         </div>
         <div class="clr-col-lg-8 clr-offset-lg-2">
-            <div style="display: flex; flex-direction: row; justify-content: space-around" >
+            <div style="display: flex; flex-direction: row; justify-content: space-around">
                 <a class="signup" (click)="registerAccount()">Create new account</a>
                 <!--<a class="signup" (click)="resetPassword()">Forgot Password?</a>-->
             </div>

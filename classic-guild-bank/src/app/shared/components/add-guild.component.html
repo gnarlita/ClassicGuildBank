@@ -12,12 +12,13 @@
                     <clr-input-container>
                         <label>Guild Name</label>
                         <input clrInput type="text" [(ngModel)]="guildName" name="guildName" required />
-                    </clr-input-container>               
+                    </clr-input-container>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline" (click)="closeAddGuildModal()">Cancel</button>
-                <button type="button" class="btn btn-primary" [disabled]="!addGuildForm.form.valid" (click)="submitAddGuildForm()">Ok</button>
+                <button type="button" class="btn btn-primary" [disabled]="!addGuildForm.form.valid"
+                    (click)="submitAddGuildForm()">Ok</button>
             </div>
         </div>
     </div>
