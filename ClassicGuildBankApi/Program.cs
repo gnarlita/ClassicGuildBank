@@ -38,7 +38,6 @@ namespace SSIndustrialApi
                 {
                     config.Sources.Clear();
                     config.AddJsonFile("appsettings.json");
-                    //config.AddJsonFile($"appsettings.{environment}.json");
                     config.AddEnvironmentVariables();
                 });
         }

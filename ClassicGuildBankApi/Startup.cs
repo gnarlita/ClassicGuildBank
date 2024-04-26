@@ -101,9 +101,8 @@ namespace SSIndustrialApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            var url = _configuration.GetValue<string>("ClientUrl");
             app.UseCors(
-                    options => options.WithOrigins(url.Substring(0, url.IndexOf("/#")))
+                    options => options.WithOrigins("http://localhost:4200", "https://notagb.com", "https://www.notagb.com")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials());
