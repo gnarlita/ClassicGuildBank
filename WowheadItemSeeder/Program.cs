@@ -92,7 +92,7 @@ namespace WowheadItemSeeder {
             }
 
             if ( maxId < 225000 ) {
-                itemCnt += await DoImportItems(Math.Max(184937, maxId), 225000, bankDb1, bankDb2, bankDb3, bankDb4, bankDb5, deserializer);
+                itemCnt += await DoImportItems(Math.Max(184937, maxId), 230000, bankDb1, bankDb2, bankDb3, bankDb4, bankDb5, deserializer);
                 maxId = 225000;
             }
 
