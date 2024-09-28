@@ -91,9 +91,9 @@ namespace WowheadItemSeeder {
                 maxId = 24360;
             }
 
-            if ( maxId < 225000 ) {
-                itemCnt += await DoImportItems(Math.Max(184937, maxId), 230000, bankDb1, bankDb2, bankDb3, bankDb4, bankDb5, deserializer);
-                maxId = 225000;
+            if ( maxId < 235000 ) {
+                itemCnt += await DoImportItems(Math.Max(184937, maxId), 235000, bankDb1, bankDb2, bankDb3, bankDb4, bankDb5, deserializer);
+                maxId = 235000;
             }
 
             itemCnt += await bankDb1.SaveChangesAsync();
