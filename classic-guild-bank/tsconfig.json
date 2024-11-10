@@ -23,5 +23,12 @@
       "es2017",
       "dom"
     ]
-  }
+  },
+  "exclude": [
+    "src/test.ts",
+    "src/app/core/storage.service.ts",
+    "src/app/shared/filters.ts",
+    "src/app/shared/components/cart.component.ts",
+    "src/environments/environment.prod.ts"
+  ]
 }
