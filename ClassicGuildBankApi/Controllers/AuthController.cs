@@ -26,15 +26,10 @@ namespace ClassicGuildBankApi.Controllers
         #region Data Members
 
         private readonly ILogger<AuthController> _logger;
-
         private readonly SignInManager<ClassicGuildBankUser> _signInManager;
-
         private readonly UserManager<ClassicGuildBankUser> _userManager;
-
         private readonly IConfiguration _configuration;
-
         private readonly SendGridService _sendGridService;
-
         private readonly GuildBankRepository _guildBankRepository;
 
         #endregion
@@ -72,12 +67,8 @@ namespace ClassicGuildBankApi.Controllers
                     return BadRequest(new { errorMessage = GetModelStateErrors() });
 
                 var user = await _userManager.FindByNameAsync(model.UserName);
-                //var emailResult = await _userManager.IsEmailConfirmedAsync(user);
-
-                //if (!emailResult)
-                //    return BadRequest(new { errorMessage = "Email Not Confirmed", errorAction = "Resend Confirmation" });
-
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+
                 if (result.Succeeded)
                 {
                     if (!String.IsNullOrEmpty(model.GuildToken))
@@ -88,14 +79,14 @@ namespace ClassicGuildBankApi.Controllers
                     }
 
                     return Ok(new { token = GenerateJwtToken(user) });
-                }                
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Exception thrown while logging in: {ex}");
             }
 
-            return BadRequest(new { errorMessage = "Failed to login" } );
+            return BadRequest(new { errorMessage = "Failed to login" });
         }
 
         [HttpPost("logout")]
@@ -104,7 +95,6 @@ namespace ClassicGuildBankApi.Controllers
             try
             {
                 await _signInManager.SignOutAsync();
-
                 return Ok();
             }
             catch (Exception ex)
@@ -112,7 +102,7 @@ namespace ClassicGuildBankApi.Controllers
                 _logger.LogError($"Exception thrown while logging out: {ex}");
             }
 
-            return BadRequest(new { errorMessage = "Failed to logout" } );
+            return BadRequest(new { errorMessage = "Failed to logout" });
         }
 
         [HttpPost("register")]
@@ -122,30 +112,24 @@ namespace ClassicGuildBankApi.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    return BadRequest(new { errorMessage = GetModelStateErrors() } );
+                    return BadRequest(new { errorMessage = GetModelStateErrors() });
 
                 var user = await _userManager.FindByNameAsync(model.Username);
-
                 if (user != null)
                     return BadRequest(new { errorMessage = "Username is already in use" });
 
-                var result = _userManager.CreateAsync(new ClassicGuildBankUser()
+                var result = await _userManager.CreateAsync(new ClassicGuildBankUser()
                 {
-                    UserName = model.Username,                      
+                    UserName = model.Username,
                     Email = model.Email,
-                }, model.Password).Result;
+                }, model.Password);
 
                 if (!result.Succeeded)
                     return BadRequest(new { errorMessage = result.Errors.First().Description });
 
-                var addedUser = _userManager.FindByNameAsync(model.Username).Result;
+                var addedUser = await _userManager.FindByNameAsync(model.Username);
 
-                //var token = await _userManager.GenerateEmailConfirmationTokenAsync(addedUser);
-                //var safeToken = HttpUtility.UrlEncode(token);
-
-                //_sendGridService.SendEmailConfirmationEmail(addedUser, safeToken);
-
-                if(!String.IsNullOrEmpty(model.GuildToken))
+                if (!String.IsNullOrEmpty(model.GuildToken))
                 {
                     var member = _guildBankRepository.AddGuildMember(model.GuildToken, addedUser);
                     if (member == null)
@@ -162,10 +146,11 @@ namespace ClassicGuildBankApi.Controllers
 
         [HttpGet("confirm")]
         [AllowAnonymous]
-        public async Task<IActionResult> Confirm([FromQuery]string username, [FromQuery]string code)
+        public async Task<IActionResult> Confirm([FromQuery] string username, [FromQuery] string code)
         {
             var user = await _userManager.FindByNameAsync(username);
-            var vm = new ConfirmViewModel {
+            var vm = new ConfirmViewModel
+            {
                 Success = true,
                 ClientUrl = _configuration.GetValue<string>("ClientUrl")
             };
@@ -174,25 +159,15 @@ namespace ClassicGuildBankApi.Controllers
             {
                 vm.Success = false;
                 vm.Message = $"Unable to locate user {username} to confirm";
-
                 return BadRequest(new { errorMessage = $"Unable to locate user {username} to confirm" });
-            } 
-
-            //var result = await _userManager.ConfirmEmailAsync(user, code);
-            //if (!result.Succeeded)
-            //{
-            //    vm.Success = false;
-            //    vm.Message = $"Failed to confirm email";
-
-            //    return BadRequest(new { errorMessage = "Failed to confirm email" });
-            //}
+            }
 
             return Accepted();
         }
 
         [AllowAnonymous]
         [HttpPost("resetPassword")]
-        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordModel model)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new { errorMessage = GetModelStateErrors() });
@@ -202,7 +177,6 @@ namespace ClassicGuildBankApi.Controllers
                 return BadRequest(new { errorMessage = "Unable to locate user" });
 
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-
             if (!result.Succeeded)
                 return BadRequest(new { errorMessage = result.Errors.First().Description });
 
@@ -211,46 +185,6 @@ namespace ClassicGuildBankApi.Controllers
                 return Ok(GenerateJwtToken(user));
 
             return BadRequest(new { errorMessage = "Failed to sign in" });
-        }
-
-        [AllowAnonymous]
-        [HttpPost("sendResetPasswordEmail")]
-        public async Task<IActionResult> SendResetPasswordEmail([FromBody]SendResetPasswordEmailModel model)
-        {
-            //if(!ModelState.IsValid)
-            //    return BadRequest(new { errorMessage = GetModelStateErrors() });
-
-            //var user = await _userManager.FindByEmailAsync(model.Email);
-            //if (user == null)
-            //    return BadRequest(new { errorMessage = "An account with that email address does not exist" });
-
-            //if (!user.UserName.Equals(model.Username, StringComparison.InvariantCultureIgnoreCase))
-            //    return BadRequest(new { errorMessage = "An account with that username and email combination does not exist" });
-
-            //var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            //_sendGridService.SendPasswordResetEmail(user, HttpUtility.UrlEncode(token));
-
-            return Ok();
-        }
-
-        [AllowAnonymous]
-        [HttpPost("sendConfirmationEmail")]
-        public async Task<IActionResult> sendConfirmationEmail([FromBody]LoginViewModel model)
-        {
-
-            //if (!ModelState.IsValid)
-            //    return BadRequest(GetModelStateErrors());
-
-            //var user = await _userManager.FindByNameAsync(model.UserName);
-            //if (user == null)
-            //    return BadRequest(new { errorMessage = "Failed to locate user" });
-
-            //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            //var safeToken = HttpUtility.UrlEncode(token);
-
-            //_sendGridService.SendEmailConfirmationEmail(user, safeToken);
-
-            return Ok();
         }
 
         #endregion
@@ -285,7 +219,6 @@ namespace ClassicGuildBankApi.Controllers
                 expiration = token.ValidTo,
                 user = user.UserName
             };
-            
         }
 
         private string GetModelStateErrors()
