@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;  // Add this line
 using Microsoft.IdentityModel.Tokens;
 
 namespace SSIndustrialApi
@@ -21,7 +22,6 @@ namespace SSIndustrialApi
         #region Data Members
 
         private readonly IConfiguration _configuration;
-
         private readonly IWebHostEnvironment _hostingEnvironment;
 
         #endregion
@@ -62,7 +62,6 @@ namespace SSIndustrialApi
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
                 })
                 .AddJwtBearer(cfg =>
                 {
@@ -79,7 +78,7 @@ namespace SSIndustrialApi
 
             services.AddMvc(options => {
                 options.EnableEndpointRouting = false;
-                if ( _hostingEnvironment.IsProduction() )
+                if (_hostingEnvironment.IsProduction())
                     options.Filters.Add(new RequireHttpsAttribute());
             }).AddJsonOptions(jsonOptions => {
                 jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
@@ -87,7 +86,8 @@ namespace SSIndustrialApi
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
-            services.AddDbContext<ClassicGuildBankDbContext>( options => options.UseSqlServer(_configuration.GetConnectionString("ClassicGuildBankDb")));
+            services.AddDbContext<ClassicGuildBankDbContext>(options => 
+                options.UseSqlServer(_configuration.GetConnectionString("ClassicGuildBankDb")));
 
             services.AddTransient<ClassicGuildBankSeeder>();
 
@@ -116,9 +116,6 @@ namespace SSIndustrialApi
             }
 
             app.UseHttpsRedirection();
-
-            //app.UseMiddleware<JWTCookieMiddleware>();
-
             app.UseAuthentication();
 
             app.UseMvc(routes =>
