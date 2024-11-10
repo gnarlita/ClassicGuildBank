@@ -4,7 +4,7 @@ import { CartItem } from '../models/guildbank/cart-item';
 import { GuildStore } from './guild.store';
 import { IMoney } from '../models/guildbank/money.interface';
 import { RequestItemModel } from '../models/guild/requestItemModel';
-import { tap } from 'rxjs/internal/operators/tap';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
