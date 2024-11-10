@@ -15,21 +15,17 @@ export class RegisterUserComponent implements OnInit {
   @Output() closeRequested: EventEmitter<any> = new EventEmitter();
   
   public registerForm: FormGroup;
-
   public errorText: string;
   public successText: string;
-
   public formSubmitted: boolean = false;
 
-  @ViewChild(ClrForm, {static: false} ) clrForm : ClrForm;
-
+  @ViewChild(ClrForm, {static: false}) clrForm: ClrForm;
 
   constructor(
     private userStore: UserStore,       
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute
-  ) {     
-  }
+  ) {}
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -40,11 +36,11 @@ export class RegisterUserComponent implements OnInit {
       guildToken: new FormControl('')
     }, {
       validator: this.mustMatch('password', 'repeatPassword')
-    }),
+    });
 
     this.activatedRoute.paramMap.pipe(take(1)).subscribe(map => {
       const token = map.get('guildToken');
-      if( token ) {
+      if (token) {
         this.registerForm.get('guildToken').setValue(token);
       }
     });
@@ -65,18 +61,18 @@ export class RegisterUserComponent implements OnInit {
     this.successText = undefined;
 
     if (!this.registerForm.valid) {
-      this.clrForm.markAsDirty();
+      // Mark all controls in the form as dirty
+      Object.values(this.registerForm.controls).forEach(control => control.markAsDirty());
       return;
     }
 
     this.userStore.registerUser(this.registerForm.value).subscribe({
-      next: () =>{
-        //this.successText = "An email has been sent to the address provided, you must confirm your account before logging in."
+      next: () => {
         this.successText = "You may now sign in using your username and password.";
         this.formSubmitted = true;
       }, 
       error: (errorResponse) => {
-        console.error( errorResponse.error );
+        console.error(errorResponse.error);
         this.errorText = errorResponse.error.errorMessage;
       }
     });
@@ -84,25 +80,22 @@ export class RegisterUserComponent implements OnInit {
 
   public mustMatch(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
-        const control = formGroup.controls[controlName];
-        const matchingControl = formGroup.controls[matchingControlName];
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
 
-        if (matchingControl.errors && !matchingControl.errors.mustMatch) {
-            // return if another validator has already found an error on the matchingControl
-            return;
-        }
+      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+        return;
+      }
 
-        // set error on matchingControl if validation fails
-        if (control.value !== matchingControl.value) {
-            matchingControl.setErrors({ mustMatch: true });
-        } else {
-            matchingControl.setErrors(null);
-        }
-    }
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({ mustMatch: true });
+      } else {
+        matchingControl.setErrors(null);
+      }
+    };
   }
 
   private onError(errorResponse) {
-    
     this.errorText = errorResponse.error;
   }
 }

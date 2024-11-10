@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, Input } from '@angular/core';
 import { UserStore } from './user.store';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { ClrForm } from '@clr/angular';
 
 @Component({
   selector: 'cgb-reset-password',
@@ -17,18 +16,16 @@ export class ResetPasswordComponent implements OnInit {
   public successText: string;
   public formSubmitted: boolean = false;
 
-  @ViewChild(ClrForm, {static: false} ) clrForm : ClrForm;
-
   constructor(
     private userStore: UserStore,       
-    private formBuilder: FormBuilder) {
-    }
+    private formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
     this.resetForm = this.formBuilder.group({
       username: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email])
-    })
+    });
   }
 
   public get f() {
@@ -40,23 +37,24 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   public submit() {
-
     this.errorText = undefined;
     this.successText = undefined;
 
     if (!this.resetForm.valid) {
-      this.clrForm.markAsDirty();
+      // Mark each form control as dirty to trigger validation messages
+      Object.keys(this.resetForm.controls).forEach(controlName => {
+        this.resetForm.controls[controlName].markAsDirty();
+      });
       return;
     }
 
     this.userStore.sendResetPasswordEmail(this.resetForm.value).subscribe({
       next: () => {
-        this.successText = "An email has been sent to the address provided. Follow the instructions to reset your password"
+        this.successText = "An email has been sent to the address provided. Follow the instructions to reset your password";
         this.formSubmitted = true;
       },
       error: (response) => {
-        console.error( response.error );
-        debugger;
+        console.error(response.error);
         this.errorText = response.error.errorMessage;
       }
     });

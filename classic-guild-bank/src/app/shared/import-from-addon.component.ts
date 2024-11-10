@@ -13,11 +13,8 @@ export class ImportFromAddonComponent implements OnInit {
   @Output() onImportStringUploaded: EventEmitter<any> = new EventEmitter();
 
   public addonImportForm: FormGroup;
-
   public errorText: string;
-
   public formSubmitted: boolean = false;
-
   public uploadingImportString: boolean = false;
 
   @ViewChild(ClrForm, { static: false }) clrForm: ClrForm;
@@ -41,7 +38,8 @@ export class ImportFromAddonComponent implements OnInit {
     this.errorText = undefined;
 
     if (!this.addonImportForm.valid) {
-      this.clrForm.markAsDirty();
+      // Mark all controls in the form as dirty
+      Object.values(this.addonImportForm.controls).forEach(control => control.markAsDirty());
       return;
     }
 
