@@ -22,13 +22,13 @@ namespace SSIndustrialApi
 
         private readonly IConfiguration _configuration;
 
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
         #endregion
 
         #region Constructor
 
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             _configuration = configuration;
             _hostingEnvironment = hostingEnvironment;
@@ -55,7 +55,6 @@ namespace SSIndustrialApi
                options.Password.RequireUppercase = true;
                options.Password.RequireLowercase = true;
             });
-
 
             services
                 .AddAuthentication(options =>
@@ -99,7 +98,7 @@ namespace SSIndustrialApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors(
                     options => options.WithOrigins("http://localhost:4200", "https://notagb.com", "https://www.notagb.com")
