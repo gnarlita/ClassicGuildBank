@@ -21,7 +21,12 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/config"
+              "src/config",
+              {
+                "glob": "site.webmanifest",
+                "input": "src/assets",
+                "output": "/"
+              }
             ],
             "styles": [
               "node_modules/@clr/icons/clr-icons.min.css",
